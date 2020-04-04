@@ -1,0 +1,21 @@
+{
+    "name": "josemmo/plesk-real-ip-address",
+    "description": "Real IP Address Extension for Plesk",
+    "config": {
+        "vendor-dir": "src/plib/vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "PleskExt\\RealIpAddress\\": [
+                "modules/real-ip-address/library/",
+                "src/plib/library/"
+            ]
+        }
+    },
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "plesk/pm-api-stubs": "^17.0"
+    }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <id>real-ip-address</id>
+    <name>Real IP Address</name>
+    <description>Fix the client's IP address when running Plesk behind a proxy</description>
+    <category>webserver</category>
+    <version>0.0.1</version>
+    <release>1</release>
+    <vendor>josemmo</vendor>
+    <url>https://github.com/josemmo/plesk-real-ip-address</url>
+    <plesk_min_version>17.0</plesk_min_version>
+    <os>unix</os>
+</module>
