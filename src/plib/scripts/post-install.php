@@ -1,2 +1,5 @@
 <?php
-\PleskExt\RealIpAddress\Service::register();
+use PleskExt\RealIpAddress\Service;
+
+Service::register();
+Service::apply();
