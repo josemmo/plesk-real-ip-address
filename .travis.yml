@@ -16,6 +16,7 @@ before_install:
 
 install:
   - docker run -d --rm -p 80:80 -p 443:443 -p 8880:8880 -p 8443:8443 -p 8447:8447 --name "$CONTAINER_NAME" plesk/plesk
+  - sleep 60
   - docker cp "$BUILD_PATH" "$CONTAINER_NAME:/var/tmp/extension.zip"
   - docker exec "$CONTAINER_NAME" plesk bin extension -i /var/tmp/extension.zip
 
