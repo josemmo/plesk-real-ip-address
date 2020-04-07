@@ -8,6 +8,6 @@ abstract class AbstractTestCase extends TestCase {
      * @return string|null          Result
      */
     protected function runCommand(string $command): ?string {
-        return shell_exec('docker exec ' . escapeshellarg($_ENV['CONTAINER_NAME']) . ' ' . $command);
+        return shell_exec('docker exec ' . escapeshellarg(getenv('CONTAINER_NAME')) . ' ' . $command);
     }
 }
