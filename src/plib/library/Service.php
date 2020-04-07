@@ -41,7 +41,7 @@ class Service {
         foreach (Settings::getEnabledPresets() as $preset) {
             $res .= "# " . Settings::PRESETS[$preset]['name'] . " settings\n";
             foreach (self::getPresetIpRanges($preset) as $range) {
-                $res .= "real_ip_recursive $range;\n";
+                $res .= "set_real_ip_from $range;\n";
             }
             $res .= "\n";
         }
@@ -51,7 +51,7 @@ class Service {
         if ($customProvider['enabled']) {
             $res .= "# Custom provider settings\n";
             foreach ($customProvider['ipRanges'] as $range) {
-                $res .= "real_ip_recursive $range;\n";
+                $res .= "set_real_ip_from $range;\n";
             }
             $res .= "\n";
         }
