@@ -1,0 +1,35 @@
+language: php
+php:
+  - 7.4
+
+env:
+  global:
+    - CONTAINER_NAME=plesk_env
+    - BUILD_PATH=extension.zip
+
+services:
+  - docker
+
+before_install:
+  - composer install --no-dev
+  - chmod u+x ./build.sh && ./build.sh
+
+install:
+  - docker run -d --rm -p 80:80 -p 443:443 -p 8880:8880 -p 8443:8443 -p 8447:8447 --name "$CONTAINER_NAME" plesk/plesk
+  - docker cp "$BUILD_PATH" "$CONTAINER_NAME:/var/tmp/extension.zip"
+  - docker exec "$CONTAINER_NAME" plesk bin extension -i /var/tmp/extension.zip
+
+script:
+  - composer install
+  - src/plib/vendor/bin/phpunit tests
+
+before_deploy:
+  - mv "$BUILD_PATH" "real-ip-address-$TRAVIS_TAG.zip"
+
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  file: "real-ip-address-$TRAVIS_TAG.zip"
+  cleanup: false
+  on:
+    tags: true

@@ -12,10 +12,16 @@
             ]
         }
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
     "require": {
         "php": "^7.0"
     },
     "require-dev": {
-        "plesk/pm-api-stubs": "^17.0"
+        "plesk/pm-api-stubs": "^17.0",
+        "phpunit/phpunit": "9"
     }
 }
