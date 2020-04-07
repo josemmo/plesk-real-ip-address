@@ -10,17 +10,17 @@ class IndexController extends pm_Controller_Action {
         parent::init();
 
         if (!pm_Session::getClient()->isAdmin()) {
-            throw new pm_Exception('Permission denied');
+            throw new pm_Exception($this->lmsg('permDenied'));
         }
 
-        $this->view->pageTitle = "Real IP Address";
+        $this->view->pageTitle = $this->lmsg('appName');
         $this->view->tabs = [
             [
-                'title' => 'Settings',
+                'title' => $this->lmsg('settings'),
                 'action' => 'form'
             ],
             [
-                'title' => 'Preview',
+                'title' => $this->lmsg('preview'),
                 'action' => 'preview'
             ]
         ];
@@ -45,7 +45,7 @@ class IndexController extends pm_Controller_Action {
             try {
                 $form->process();
                 Service::apply();
-                $this->_status->addInfo('Changes successfully applied.');
+                $this->_status->addInfo($this->lmsg('changesApplied'));
             } catch (pm_Exception $e) {
                 $this->_status->addError($e->getMessage());
             }
@@ -64,7 +64,7 @@ class IndexController extends pm_Controller_Action {
     public function previewAction() {
         $configuration = Service::getNginxConfiguration();
         if (empty($configuration)) {
-            $configuration = "<<< No configuration being applied >>>";
+            $configuration = "<<< {$this->lmsg('noConfApplied')} >>>";
         }
 
         $form = new pm_Form_Simple();

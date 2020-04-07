@@ -12,13 +12,13 @@ class SettingsForm extends \pm_Form_Simple {
 
         // Add presets subform
         $presetsForm = new \pm_Form_SubForm();
-        $presetsForm->setLegend('Presets');
+        $presetsForm->setLegend($this->lmsg('presets'));
         $presetsForm->addElement('description', 'description', [
-            'description' => 'If your server is running behind one or more than one of these providers, just check their respective checkboxes to automatically configure and enable them.'
+            'description' => $this->lmsg('presetsDesc')
         ]);
         foreach (Settings::PRESETS as $preset=>$data) {
             $presetsForm->addElement('checkbox', $preset, [
-                'label' => "Enable for {$data['name']}",
+                'label' => $this->lmsg('enableForPreset', ['preset' => $data['name']]),
                 'value' => in_array($preset, $enabledPresets)
             ]);
         }
@@ -26,17 +26,17 @@ class SettingsForm extends \pm_Form_Simple {
 
         // Add custom provider subform
         $customForm = new \pm_Form_SubForm();
-        $customForm->setLegend('Custom Provider');
+        $customForm->setLegend($this->lmsg('customProvider'));
         $customForm->addElement('description', 'description', [
-            'description' => 'If your server is running behind a provider not natively supported by this extension, you can manually configure it from here.'
+            'description' => $this->lmsg('customProviderDesc')
         ]);
         $customForm->addElement('checkbox', 'enabled', [
-            'label' => 'Enable custom provider',
+            'label' => $this->lmsg('enableCustomProvider'),
             'value' => $customProvider['enabled']
         ]);
         $customForm->addElement('textarea', 'ip_ranges', [
-            'label' => 'Custom IP Ranges',
-            'description' => 'In CIDR notation, one per line',
+            'label' => $this->lmsg('customIpRanges'),
+            'description' => $this->lmsg('customIpRangesDesc'),
             'class' => 'f-max-size code js-auto-resize',
             'rows' => 6,
             'value' => implode("\n", $customProvider['ipRanges']),
@@ -46,27 +46,27 @@ class SettingsForm extends \pm_Form_Simple {
 
         // Add advanced subform
         $advancedForm = new \pm_Form_SubForm();
-        $advancedForm->setLegend('Advanced Settings');
+        $advancedForm->setLegend($this->lmsg('advancedSettings'));
         $advancedForm->addElement('description', 'description', [
-            'description' => 'For experienced users only. Do not change any of these settings unless you know what you are doing.'
+            'description' => $this->lmsg('advancedSettingsDesc')
         ]);
         $advancedForm->addElement('text', 'header', [
-            'label' => 'Header field',
-            'description' => 'Header field containing the real IP address of the client',
-            'placeholder' => 'E.g.: X-Forwarded-For',
+            'label' => $this->lmsg('headerField'),
+            'description' => $this->lmsg('headerFieldDesc'),
+            'placeholder' => $this->lmsg('headerFieldHelp'),
             'value' => $advanced['header'],
             'required' => true
         ]);
         $advancedForm->addElement('checkbox', 'recursive', [
-            'label' => 'Enable recursive mode',
-            'description' => 'If recursive search is enabled, the original client address that matches one of the trusted addresses is replaced by the last non-trusted address sent in the request header field',
+            'label' => $this->lmsg('enableRecursiveMode'),
+            'description' => $this->lmsg('enableRecursiveModeDesc'),
             'value' => $advanced['recursive']
         ]);
         $this->addSubForm($advancedForm, 'advanced');
 
         // Add save button
         $this->addControlButtons([
-            'sendTitle' => 'Save and apply'
+            'sendTitle' => $this->lmsg('saveAndApply')
         ]);
     }
 
@@ -84,13 +84,13 @@ class SettingsForm extends \pm_Form_Simple {
         }
         $customIpRanges = $data['custom']['ip_ranges'];
         if (!empty($customIpRanges) && !CidrUtils::validate($customIpRanges)) {
-            $customForm->getElement('ip_ranges')->addError('Not a valid list of CIDR ranges.');
+            $customForm->getElement('ip_ranges')->addError($this->lmsg('notValidRange'));
             return false;
         }
 
         // Validate header field
         if (!preg_match('/^[a-z0-9\-]+$/i', $data['advanced']['header'])) {
-            $advancedForm->getElement('header')->addError('Not a valid header field.');
+            $advancedForm->getElement('header')->addError($this->lmsg('notValidHeaderField'));
             return false;
         }
 
