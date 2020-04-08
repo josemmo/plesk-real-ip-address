@@ -31,6 +31,6 @@ deploy:
   provider: releases
   api_key: $GH_TOKEN
   file: "real-ip-address-$TRAVIS_TAG.zip"
-  cleanup: false
+  skip_cleanup: true
   on:
     tags: true
