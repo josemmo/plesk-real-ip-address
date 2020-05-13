@@ -4,8 +4,8 @@
     <name>Real IP Address</name>
     <description>Fix the client's IP address when running Plesk behind a proxy</description>
     <category>webserver</category>
-    <version>0.0.2</version>
-    <release>2</release>
+    <version>0.0.3</version>
+    <release>3</release>
     <vendor>josemmo</vendor>
     <url>https://github.com/josemmo/plesk-real-ip-address</url>
     <plesk_min_version>17.0</plesk_min_version>
