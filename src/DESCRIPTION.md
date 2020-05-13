@@ -14,3 +14,6 @@ To fix this issue, install the extension, choose between multiple already define
 
 ### More Information
 You can find the source code for this extension, suggest new features and report bugs at [this link](https://github.com/josemmo/plesk-real-ip-address).
+
+### GDPR Notice
+When using this extension you need to take all the needed measures according to the European General Data Protection Regulation (GDPR) and other privacy related acts or laws.
