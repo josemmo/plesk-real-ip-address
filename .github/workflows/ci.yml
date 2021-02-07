@@ -1,0 +1,46 @@
+name: CI/CD
+
+on:
+  push:
+  release:
+    types: [published]
+
+jobs:
+  ci:
+    name: CI/CD
+    runs-on: ubuntu-latest
+    env:
+      CONTAINER_NAME: plesk_env
+      BUILD_PATH: extension.zip
+    steps:
+      # Download code from repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Setup PHP and Composer
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      # Build release
+      - name: Build release
+        run: composer install --no-dev && chmod u+x ./build.sh && ./build.sh
+
+      # Test on Plesk server
+      - name: Run tests on Plesk server
+        run: |
+          docker run -d --rm -p 80:80 -p 443:443 -p 8880:8880 -p 8443:8443 -p 8447:8447 --name $CONTAINER_NAME plesk/plesk
+          sleep 60
+          docker cp $BUILD_PATH "$CONTAINER_NAME:/var/tmp/extension.zip"
+          docker exec $CONTAINER_NAME plesk bin extension -i /var/tmp/extension.zip
+
+      # Upload release
+      - name: Upload release
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_VERSION=${GITHUB_REF##*/}
+          mv $BUILD_PATH "real-ip-address-$RELEASE_VERSION.zip"
+          gh release upload $RELEASE_VERSION "real-ip-address-$RELEASE_VERSION.zip"
