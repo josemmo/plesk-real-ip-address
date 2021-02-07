@@ -27,13 +27,18 @@ jobs:
       - name: Build release
         run: composer install --no-dev && chmod u+x ./build.sh && ./build.sh
 
-      # Test on Plesk server
-      - name: Run tests on Plesk server
+      # Install extension
+      - name: Install extension on Plesk server
         run: |
           docker run -d --rm -p 80:80 -p 443:443 -p 8880:8880 -p 8443:8443 -p 8447:8447 --name $CONTAINER_NAME plesk/plesk
+          echo "Waiting 60 seconds..."
           sleep 60
           docker cp $BUILD_PATH "$CONTAINER_NAME:/var/tmp/extension.zip"
           docker exec $CONTAINER_NAME plesk bin extension -i /var/tmp/extension.zip
+
+      # Run tests
+      - name: Run tests on Plesk server
+        run: composer install && src/plib/vendor/bin/phpunit tests
 
       # Upload release
       - name: Upload release
